@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           `;
         }
+
   // Delegate click event for delete icons (outside fetchActivities to avoid multiple bindings)
   activitiesList.addEventListener("click", async (event) => {
     if (event.target.classList.contains("delete-icon")) {
