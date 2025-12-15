@@ -89,11 +89,30 @@ section h3 {
 }
 
 .activity-card .participants-list {
-  list-style-type: disc;
-  margin-left: 20px;
+  list-style-type: none;
+  margin-left: 0;
   margin-bottom: 0;
   color: #333;
   font-size: 15px;
+  padding-left: 0;
+}
+
+.participant-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.delete-icon {
+  color: #c62828;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin-left: 6px;
+  transition: color 0.2s;
+}
+.delete-icon:hover {
+  color: #ff5252;
 }
 
 .activity-card .participants-section.no-participants {
