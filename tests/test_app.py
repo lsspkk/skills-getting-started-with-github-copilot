@@ -53,10 +53,9 @@ def test_signup_activity_full():
     activities_response = client.get("/activities")
     activity_data = activities_response.json()[activity]
     max_participants = activity_data["max_participants"]
-    current_participants = activity_data["participants"][:]
     
     # Clean up - unregister all test users first
-    for i in range(20):
+    for i in range(max_participants + 5):
         email = f"fulltest{i}@mergington.edu"
         client.post(f"/activities/{activity}/unregister?email={email}")
     
