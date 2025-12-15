@@ -44,3 +44,38 @@ def test_signup_activity_not_found():
 def test_unregister_activity_not_found():
     response = client.post("/activities/Nonexistent/unregister?email=someone@mergington.edu")
     assert response.status_code == 404
+
+def test_signup_activity_full():
+    """Test that signup fails when activity is at max capacity"""
+    activity = "Mathletes"  # max_participants: 10
+    
+    # Get current activity state
+    activities_response = client.get("/activities")
+    activity_data = activities_response.json()[activity]
+    max_participants = activity_data["max_participants"]
+    
+    # Clean up - unregister all test users first
+    for i in range(max_participants + 5):
+        email = f"fulltest{i}@mergington.edu"
+        client.post(f"/activities/{activity}/unregister?email={email}")
+    
+    # Fill up the activity to max capacity
+    test_emails = []
+    for i in range(max_participants):
+        email = f"fulltest{i}@mergington.edu"
+        test_emails.append(email)
+        response = client.post(f"/activities/{activity}/signup?email={email}")
+        assert response.status_code == 200
+    
+    # Try to sign up one more student when activity is full
+    overflow_email = f"fulltest{max_participants}@mergington.edu"
+    response = client.post(f"/activities/{activity}/signup?email={overflow_email}")
+    
+    # Should return 400 status code
+    assert response.status_code == 400
+    # Should have an appropriate error message
+    assert "full" in response.json()["detail"].lower()
+    
+    # Cleanup - unregister all test users
+    for email in test_emails:
+        client.post(f"/activities/{activity}/unregister?email={email}")
